@@ -18,4 +18,6 @@ interface Theme {
 
     val additionalTextColor: Int
 
+    val selectedColor: Int
+
 }

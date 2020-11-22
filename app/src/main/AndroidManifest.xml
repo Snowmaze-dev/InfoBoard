@@ -3,7 +3,6 @@
     package="ru.snowmaze.infoboard">
 
     <application
-        android:hardwareAccelerated="true"
         android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

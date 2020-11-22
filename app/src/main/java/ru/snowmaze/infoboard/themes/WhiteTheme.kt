@@ -23,4 +23,6 @@ class WhiteTheme(context: Context) : Theme {
 
     override val additionalTextColor = context.color(R.color.white_theme_additional_text)
 
+    override val selectedColor = context.color(R.color.white_theme_selected)
+
 }

@@ -34,14 +34,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private val binding: FragmentHomeBinding by viewBinding()
     private val viewModel: HomeViewModel by viewModel()
     private val adapter: NotesAdapter by lazy { NotesAdapter(requireContext()) }
-    private lateinit var themeButtonLocation: IntArray
     private var themeChanging = false
-    private val twentyDp = 20.dp()
 
     override fun initView(view: View, theme: Theme, savedInstanceState: Bundle?) {
         with(binding) {
-            ViewCompat.setOnApplyWindowInsetsListener(toolbar) { view, insets ->
-                view.updatePadding(top = (twentyDp + insets.systemWindowInsetTop))
+            ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
+                view.onApplyWindowInsets(insets.toWindowInsets())
+                toolbar.updatePadding(top = (insets.systemWindowInsetTop))
                 insets.consumeSystemWindowInsets()
             }
             (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
@@ -99,9 +98,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         if (!themeChanging) {
             if (item.itemId == R.id.theme_switcher) {
                 themeChanging = true
-                val menuButton: View = binding.root.findViewById(R.id.theme_switcher)
-                themeButtonLocation = IntArray(2)
-                menuButton.getLocationInWindow(themeButtonLocation)
                 val koin = getKoin()
                 themeHolder.themeLiveData.value =
                     if (theme is WhiteTheme) koin.get<DarkTheme>() else koin.get<WhiteTheme>()
@@ -136,11 +132,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 hypot(container.measuredWidth.toFloat(), container.measuredHeight.toFloat())
 
             setTheme(theme)
+            val themeButtonLocation = IntArray(2)
+            binding.toolbar.findViewById<View>(R.id.theme_switcher).getLocationInWindow(themeButtonLocation)
 
             val anim = ViewAnimationUtils.createCircularReveal(
                 container,
-                themeButtonLocation[0] + twentyDp,
-                themeButtonLocation[1] + twentyDp,
+                themeButtonLocation[0] + switcherOffset,
+                themeButtonLocation[1] + switcherOffset,
                 0f,
                 finalRadius
             )
@@ -158,5 +156,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("task_text", binding.quickNote.text.toString())
     }
+
+    private val switcherOffset = 20.dp()
 
 }

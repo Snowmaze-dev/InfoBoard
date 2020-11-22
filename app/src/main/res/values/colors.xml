@@ -20,4 +20,6 @@
     <color name="dark_theme_mainLighter">#2A2A2A</color>
     <color name="dark_theme_toolbar_text">#FFF</color>
     <color name="dark_theme_image_button">#fff</color>
+    <color name="dark_theme_selected">#3B3B3B</color>
+    <color name="white_theme_selected">#AAAAAA</color>
 </resources>
