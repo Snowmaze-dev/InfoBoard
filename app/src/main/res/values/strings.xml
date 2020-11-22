@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name" translatable="false">InfoBoard</string>
+    <string name="home">Home</string>
+    <string name="enter_note">Enter note</string>
+</resources>

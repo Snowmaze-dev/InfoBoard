@@ -1,0 +1,7 @@
+include ':datasources'
+include ':data'
+include ':domain'
+include ':buildsystem'
+include ':themeslib'
+include ':app'
+rootProject.name = "InfoBoard"
