@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragments_container)!!
-        if (fragment is BackPressable) {
-            if (fragment.onBackPressed()) router.exit()
-        } else super.onBackPressed()
+        if (fragment is BackPressable) if (fragment.onBackPressed()) router.exit()
+        else router.exit()
+        if (supportFragmentManager.fragments.size == 0) super.onBackPressed()
     }
 }

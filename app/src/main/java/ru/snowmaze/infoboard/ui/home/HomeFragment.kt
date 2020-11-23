@@ -29,11 +29,11 @@ import ru.snowmaze.themeslib.Theme
 import kotlin.math.hypot
 
 
-class HomeFragment : BaseFragment(R.layout.fragment_home) {
+class HomeFragment : BaseFragment(R.layout.fragment_home), NotesViewHolder.NotesAdapterCallback {
 
     private val binding: FragmentHomeBinding by viewBinding()
     private val viewModel: HomeViewModel by viewModel()
-    private val adapter: NotesAdapter by lazy { NotesAdapter(requireContext()) }
+    private val adapter: NotesAdapter by lazy { NotesAdapter(requireContext(), this) }
     private var themeChanging = false
 
     override fun initView(view: View, theme: Theme, savedInstanceState: Bundle?) {
@@ -47,11 +47,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             setHasOptionsMenu(true)
             savedInstanceState?.let {
                 quickNote.setText(savedInstanceState.getString("task_text"))
-            }
-            viewModel.getNextNotes().observe(viewLifecycleOwner) { result ->
-                result.onSuccess {
-                    adapter.notes = it
-                }
             }
             doneButton.setOnClickListener {
                 val text = quickNote.text.toString()
@@ -77,6 +72,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             setTheme(theme)
             adapter.setHasStableIds(true)
             notes.adapter = adapter
+            viewModel.notes.observe(viewLifecycleOwner) {
+                adapter.notes = it
+            }
         }
     }
 
@@ -132,13 +130,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 hypot(container.measuredWidth.toFloat(), container.measuredHeight.toFloat())
 
             setTheme(theme)
-            val themeButtonLocation = IntArray(2)
-            binding.toolbar.findViewById<View>(R.id.theme_switcher).getLocationInWindow(themeButtonLocation)
+            val switcherLocation = IntArray(2)
+            binding.toolbar.findViewById<View>(R.id.theme_switcher).getLocationInWindow(switcherLocation)
 
             val anim = ViewAnimationUtils.createCircularReveal(
                 container,
-                themeButtonLocation[0] + switcherOffset,
-                themeButtonLocation[1] + switcherOffset,
+                switcherLocation[0] + switcherOffset,
+                switcherLocation[1] + switcherOffset,
                 0f,
                 finalRadius
             )
@@ -151,6 +149,14 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
             anim.start()
 
         }
+    }
+
+    override fun onNoteClick(note: Note) {
+
+    }
+
+    override fun onNoteLongClick(note: Note) {
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

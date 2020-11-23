@@ -1,22 +1,16 @@
 package ru.snowmaze.infoboard.ui.home
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.setPadding
-import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.shape.MaterialShapeDrawable
 import ru.snowmaze.domain.note.Note
 import ru.snowmaze.infoboard.databinding.LayoutNoteBinding
-import ru.snowmaze.infoboard.utils.setTint
 import ru.snowmaze.themeslib.Theme
 
 
-class NotesAdapter(context: Context) :
-    RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+class NotesAdapter(context: Context, private val callback: NotesViewHolder.NotesAdapterCallback) :
+    RecyclerView.Adapter<NotesViewHolder>(), NotesViewHolder.NotesAdapterCallback {
 
     private var mNotes = mutableListOf<Note>()
     var notes: List<Note>
@@ -27,13 +21,20 @@ class NotesAdapter(context: Context) :
         get() = mNotes
     private val layoutInflater = LayoutInflater.from(context)
     private lateinit var theme: Theme
+    var selected = mutableListOf<Note>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NotesViewHolder(
-        LayoutNoteBinding.inflate(layoutInflater, parent, false)
+        LayoutNoteBinding.inflate(layoutInflater, parent, false), this
     )
 
+
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        holder.bind(notes[position], theme)
+        val note = notes[position]
+        holder.bind(note, selected.contains(note), theme)
     }
 
     override fun getItemId(position: Int) = mNotes[position].id
@@ -56,28 +57,32 @@ class NotesAdapter(context: Context) :
         mNotes.removeAt(index)
     }
 
-    class NotesViewHolder(private val binding: LayoutNoteBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    private fun addSelected(note: Note, notesIndex: Int) {
+        selected.add(note)
+        notifyItemChanged(notesIndex)
+    }
 
-        fun bind(note: Note, theme: Theme) {
-            with(binding) {
-//                root.background =
-//                    MaterialShapeDrawable.createWithElevationOverlay(root.context, 20F).apply {
-//                        fillColor = ColorStateList(
-//                            arrayOf(intArrayOf()),
-//                            intArrayOf(theme.mainColorLighter)
-//                        )
-//                        setBounds(100, 100, 100, 100)
-//                        setCornerSize(50F)
-//                        shadowCompatibilityMode = MaterialShapeDrawable.SHADOW_COMPAT_MODE_ALWAYS
-//                    }
-                root.setCardBackgroundColor(theme.mainColorLighter)
-                noteDescription.setTextColor(theme.textColor)
-                noteDescription.text = note.text
-                noteDescription.setTint(theme.tintColor)
-            }
+    private fun removeSelected(index: Int, notesIndex: Int) {
+        selected.removeAt(index)
+        notifyItemChanged(notesIndex)
+    }
+
+    override fun onNoteClick(note: Note) {
+        if(selected.isNotEmpty()) {
+            val notesIndex = notes.indexOf(note)
+            val index = selected.indexOf(note)
+            if(index == -1) addSelected(note, notesIndex)
+            else removeSelected(index, notesIndex)
         }
+        callback.onNoteClick(note)
+    }
 
+    override fun onNoteLongClick(note: Note) {
+        val index = selected.indexOf(note)
+        val notesIndex = notes.indexOf(note)
+        if (index == -1) addSelected(note, notesIndex)
+        else removeSelected(index, notesIndex)
+        callback.onNoteLongClick(note)
     }
 
 }
