@@ -10,11 +10,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import ru.snowmaze.datasources.di.dataSourcesModules
 import ru.snowmaze.infoboard.App.Companion.INSTANCE
-import ru.snowmaze.infoboard.themes.DarkTheme
-import ru.snowmaze.infoboard.themes.WhiteTheme
 import ru.snowmaze.infoboard.ui.home.HomeViewModel
-import ru.snowmaze.themeslib.Theme
-import ru.snowmaze.themeslib.ThemeHolder
 
 class App : Application() {
 
@@ -29,20 +25,6 @@ class App : Application() {
             androidContext(this@App)
             modules(dataSourcesModules)
             modules(
-                module {
-                    single<Theme> {
-                        get<WhiteTheme>()
-                    }
-                    single {
-                        DarkTheme(this@App)
-                    }
-                    single {
-                        WhiteTheme(this@App)
-                    }
-                    single {
-                        ThemeHolder(get())
-                    }
-                },
                 module {
                     viewModel { HomeViewModel(get()) }
                 }

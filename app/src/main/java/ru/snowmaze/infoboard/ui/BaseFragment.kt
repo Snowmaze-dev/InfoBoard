@@ -1,36 +1,33 @@
 package ru.snowmaze.infoboard.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
-import org.koin.android.ext.android.inject
-import ru.snowmaze.themeslib.Theme
-import ru.snowmaze.themeslib.ThemeHolder
+import ru.snowmaze.infoboard.R
 
-abstract class BaseFragment : Fragment {
+abstract class BaseFragment (private val layoutRes: Int) : Fragment() {
 
-    protected val themeHolder: ThemeHolder by inject()
-    protected val theme
-        get() = themeHolder.themeLiveData.value!!
+    private lateinit var themeContext: ContextThemeWrapper
+    protected var theme = R.style.Light
 
-    constructor() : super()
-
-    constructor(contentLayoutId: Int) : super(contentLayoutId)
-
-    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView(view, theme, savedInstanceState)
-        var flag = true
-        themeHolder.themeLiveData.observe(viewLifecycleOwner) {
-            if(flag) {
-                flag = false
-                return@observe
-            }
-            onThemeChanged(it)
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        theme = (requireActivity() as ThemedActivity).currentTheme
+        themeContext = ContextThemeWrapper(
+            super.getContext(), theme
+        )
+        return LayoutInflater.from(themeContext).inflate(layoutRes, container, false)
     }
 
-    abstract fun onThemeChanged(theme: Theme)
-
-    abstract fun initView(view: View, theme: Theme, savedInstanceState: Bundle?)
+    override fun getContext(): Context {
+        return themeContext
+    }
 
 }

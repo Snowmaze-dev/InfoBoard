@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorBackgroundLighter" />
+    <attr name="colorBackgroundSelected" />
+    <attr name="textColor" />
+    <attr name="helperTextColor" />
+    <attr name="toolbarTextColor" />
+</resources>

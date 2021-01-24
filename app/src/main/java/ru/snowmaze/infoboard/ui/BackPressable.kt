@@ -1,4 +1,4 @@
-package ru.snowmaze.infoboard
+package ru.snowmaze.infoboard.ui
 
 interface BackPressable {
 

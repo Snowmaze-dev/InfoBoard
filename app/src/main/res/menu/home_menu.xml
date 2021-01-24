@@ -7,4 +7,9 @@
         android:title="theme"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/settings"
+        android:title="settings"
+        app:showAsAction="ifRoom" />
+
 </menu>

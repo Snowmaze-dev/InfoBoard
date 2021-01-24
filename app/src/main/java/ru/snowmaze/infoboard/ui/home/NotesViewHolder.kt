@@ -2,28 +2,17 @@ package ru.snowmaze.infoboard.ui.home
 
 import androidx.recyclerview.widget.RecyclerView
 import ru.snowmaze.domain.note.Note
+import ru.snowmaze.infoboard.R
 import ru.snowmaze.infoboard.databinding.LayoutNoteBinding
-import ru.snowmaze.infoboard.utils.setTint
-import ru.snowmaze.themeslib.Theme
+import ru.snowmaze.infoboard.utils.getColorFromAttr
 
 class NotesViewHolder(
     private val binding: LayoutNoteBinding,
     private val callback: NotesAdapterCallback
-) :
-    RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(note: Note, selected: Boolean, theme: Theme) {
+    fun bind(note: Note, selected: Boolean) {
         with(binding) {
-//                root.background =
-//                    MaterialShapeDrawable.createWithElevationOverlay(root.context, 20F).apply {
-//                        fillColor = ColorStateList(
-//                            arrayOf(intArrayOf()),
-//                            intArrayOf(theme.mainColorLighter)
-//                        )
-//                        setBounds(100, 100, 100, 100)
-//                        setCornerSize(50F)
-//                        shadowCompatibilityMode = MaterialShapeDrawable.SHADOW_COMPAT_MODE_ALWAYS
-//                    }
             root.setOnClickListener {
                 callback.onNoteClick(note)
             }
@@ -31,10 +20,13 @@ class NotesViewHolder(
                 callback.onNoteLongClick(note)
                 true
             }
-            root.setCardBackgroundColor(if(selected) theme.selectedColor else theme.mainColorLighter)
-            noteDescription.setTextColor(theme.textColor)
+            root.setCardBackgroundColor(
+                root.context.getColorFromAttr(
+                    if (selected) R.attr.colorBackgroundSelected
+                    else R.attr.colorBackgroundLighter
+                )
+            )
             noteDescription.text = note.text
-            noteDescription.setTint(theme.tintColor)
         }
     }
 

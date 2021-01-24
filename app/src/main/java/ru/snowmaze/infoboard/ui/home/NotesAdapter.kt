@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.snowmaze.domain.note.Note
 import ru.snowmaze.infoboard.databinding.LayoutNoteBinding
-import ru.snowmaze.themeslib.Theme
 
 
-class NotesAdapter(context: Context, private val callback: NotesViewHolder.NotesAdapterCallback) :
+class NotesAdapter(var context: Context, private val callback: NotesViewHolder.NotesAdapterCallback) :
     RecyclerView.Adapter<NotesViewHolder>(), NotesViewHolder.NotesAdapterCallback {
 
     private var mNotes = mutableListOf<Note>()
@@ -19,8 +18,6 @@ class NotesAdapter(context: Context, private val callback: NotesViewHolder.Notes
             notifyDataSetChanged()
         }
         get() = mNotes
-    private val layoutInflater = LayoutInflater.from(context)
-    private lateinit var theme: Theme
     var selected = mutableListOf<Note>()
         set(value) {
             field = value
@@ -28,21 +25,16 @@ class NotesAdapter(context: Context, private val callback: NotesViewHolder.Notes
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NotesViewHolder(
-        LayoutNoteBinding.inflate(layoutInflater, parent, false), this
+        LayoutNoteBinding.inflate(LayoutInflater.from(context), parent, false), this
     )
 
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         val note = notes[position]
-        holder.bind(note, selected.contains(note), theme)
+        holder.bind(note, selected.contains(note))
     }
 
     override fun getItemId(position: Int) = mNotes[position].id
-
-    fun onThemeChanged(theme: Theme) {
-        this.theme = theme
-        notifyDataSetChanged()
-    }
 
     override fun getItemCount() = notes.size
 

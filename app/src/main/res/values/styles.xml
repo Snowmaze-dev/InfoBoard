@@ -1,9 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="light_theme_primary">#0A6AB6</color>
+    <color name="light_theme_color_on_primary">#FFF</color>
+    <color name="light_theme_text">#000</color>
+    <color name="light_theme_main">#FFF</color>
+    <color name="light_theme_color_on_background">#000</color>
+    <color name="dark_theme_primary">#324191</color>
+    <color name="dark_theme_text">#FFF</color>
+    <color name="dark_theme_main">#181818</color>
+    <color name="dark_theme_mainLighter">#2A2A2A</color>
+    <color name="dark_theme_color_on_primary">#FFF</color>
+    <color name="dark_theme_on_background">#fff</color>
+    <color name="dark_theme_selected">#3C3B65</color>
+    <color name="light_theme_selected">#8BC9FF</color> <!--- #DDDDDD >-->
+    <color name="statusBar">@android:color/transparent</color>
+    <color name="navigationBar">@android:color/transparent</color>
+
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:statusBarColor">@color/statusBar</item>
+        <item name="android:navigationBarColor">@color/navigationBar</item>
+        <item name="android:actionMenuTextColor">?attr/toolbarTextColor</item>
+    </style>
+
+    <style name="Light" parent="AppTheme">
+        <item name="backgroundColor">@color/light_theme_main</item>
+        <item name="colorBackgroundLighter">@color/light_theme_main</item>
+        <item name="tint">@color/light_theme_color_on_background</item>
+        <item name="colorBackgroundSelected">@color/light_theme_selected</item>
+        <item name="textColor">@color/light_theme_text</item>
+        <item name="helperTextColor">#555555</item>
+        <item name="toolbarTextColor">?attr/colorOnPrimary</item>
+        <item name="colorOnPrimary">@color/light_theme_color_on_primary</item>
+        <item name="colorPrimary">@color/light_theme_primary</item>
+    </style>
+
+    <style name="Dark" parent="AppTheme">
+        <item name="backgroundColor">@color/dark_theme_main</item>
+        <item name="colorBackgroundLighter">@color/dark_theme_mainLighter</item>
+        <item name="tint">@color/dark_theme_on_background</item>
+        <item name="helperTextColor">#999999</item>
+        <item name="colorBackgroundSelected">@color/dark_theme_selected</item>
+        <item name="textColor">@color/dark_theme_text</item>
+        <item name="toolbarTextColor">?attr/colorOnPrimary</item>
+        <item name="colorOnPrimary">@color/dark_theme_color_on_primary</item>
+        <item name="colorPrimary">@color/dark_theme_primary</item>
     </style>
 
 </resources>
